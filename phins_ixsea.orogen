@@ -1,0 +1,29 @@
+name "phins_ixsea"
+# Optionally declare the version number
+# version "0.1"
+
+import_types_from "base"
+# import_types_from "PhinsTypes.hpp"
+
+using_library "phins_ixsea"
+using_task_library "iodrivers_base"
+
+task_context "Task" do
+    subclasses "iodrivers_base::Task"
+    needs_configuration
+
+    output_port "pose_samples", "base::samples::RigidBodyState"
+        
+end
+
+
+# Declares a deployment, i.e. an actual executable that contains various tasks.
+deployment "phins_ixsea_test" do
+    # This is a test deployment that should not be installed
+    do_not_install
+
+    # Declares it as periodic, with a period of 100ms
+    task("phins_ixsea", "Task").
+        periodic(0.1)
+end
+
