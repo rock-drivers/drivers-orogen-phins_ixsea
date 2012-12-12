@@ -1,11 +1,21 @@
-/* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
+/** @file Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
 
 #ifndef PHINS_IXSEA_TASK_TASK_HPP
 #define PHINS_IXSEA_TASK_TASK_HPP
 
 #include "phins_ixsea/TaskBase.hpp"
 
+
+
+#define BASE_LOG_DEBUG // compile time
+
+#define BASE_LOG_LEVEL DEBUG // run time ??
+#define BASE_LOG_DEFINE
+
 namespace phins_ixsea {
+
+
+	class Driver;
 
     /*! \class Task 
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.
@@ -26,7 +36,7 @@ namespace phins_ixsea {
 	friend class TaskBase;
     protected:
 
-
+		phins_ixsea::Driver* mpDriver;
 
     public:
         /** TaskContext constructor for Task
@@ -34,17 +44,19 @@ namespace phins_ixsea {
          * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.
          */
         Task(std::string const& name = "phins_ixsea::Task");
+		//Task(std::string const& name = "phins_ixsea::Task");
 
         /** TaskContext constructor for Task 
          * \param name Name of the task. This name needs to be unique to make it identifiable for nameservices. 
          * \param engine The RTT Execution engine to be used for this task, which serialises the execution of all commands, programs, state machines and incoming events for a task. 
-         * 
+         * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.
          */
         Task(std::string const& name, RTT::ExecutionEngine* engine);
+        //  Task(std::string const& name, RTT::ExecutionEngine* engine);
 
         /** Default deconstructor of Task
          */
-	~Task();
+        ~Task();
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -60,14 +72,14 @@ namespace phins_ixsea {
          end
          \endverbatim
          */
-        // bool configureHook();
+         bool configureHook();
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to Running. If it returns false, then the component will
          * stay in Stopped. Otherwise, it goes into Running and updateHook()
          * will be called.
          */
-        // bool startHook();
+        bool startHook();
 
         /** This hook is called by Orocos when the component is in the Running
          * state, at each activity step. Here, the activity gives the "ticks"
@@ -83,7 +95,8 @@ namespace phins_ixsea {
          * component is stopped and recover() needs to be called before starting
          * it again. Finally, FatalError cannot be recovered.
          */
-        // void updateHook();
+        void updateHook();
+
 
         /** This hook is called by Orocos when the component is in the
          * RunTimeError state, at each activity step. See the discussion in
@@ -91,18 +104,18 @@ namespace phins_ixsea {
          *
          * Call recover() to go back in the Runtime state.
          */
-        // void errorHook();
+         void errorHook();
 
         /** This hook is called by Orocos when the state machine transitions
          * from Running to Stopped after stop() has been called.
          */
-        // void stopHook();
+        void stopHook();
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to PreOperational, requiring the call to configureHook()
          * before calling start() again.
          */
-        // void cleanupHook();
+        void cleanupHook();
     };
 }
 

@@ -1,0 +1,10 @@
+--- name:phinsStandard
+# Configuration for the phins
+config: 
+  port: 8113
+  protocol: 0
+--- name:halliburtonSAS
+# Configuration for the phins
+config: 
+  port: 8112
+  protocol: 1

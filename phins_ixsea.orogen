@@ -2,28 +2,73 @@ name "phins_ixsea"
 # Optionally declare the version number
 # version "0.1"
 
-import_types_from "base"
-# import_types_from "PhinsTypes.hpp"
-
+# If new data types need to be defined, they have to be put in a separate C++
+# header, and this header will be loaded here
 using_library "phins_ixsea"
+
+import_types_from "phins_ixsea/PhinsTypes.hpp"
+import_types_from "phins_ixsea/Error.hpp"
+import_types_from "phins_ixsea/Config.hpp"
+
 using_task_library "iodrivers_base"
+# If the component/deployments use data types that are defined in other oroGen
+# projects, these projects should be imported there as well.
 
+
+# Declare a new task context (i.e., a component)
+#
+# The corresponding C++ class can be edited in tasks/Task.hpp and
+# tasks/Task.cpp, and will be put in the phins_ixsea namespace.
 task_context "Task" do
-    subclasses "iodrivers_base::Task"
-    needs_configuration
 
-    output_port "pose_samples", "base::samples::RigidBodyState"
-        
+	# set task to preoperational state
+	needs_configuration # starts in preoperational state: configureHook() is called before updateHook()
+    runtime_states  :INIT_DEV, :CAL_DEV, :RUN_DEV
+    error_states :COMM_ERROR
+
+	
+   # A configuration property (here, a std::string). Its value can be retrieved
+   # in the C++ code with # _config_value.get() and _config_value.set(new_value).
+   # property "config_value", "/std/string"
+ 	property('config', 'phins_ixsea/Config').
+ 		doc('Configuration for the phins')
+
+   # An input port, i.e. an object from which the component gets data from
+   # other components' outputs
+   #
+   # Data can be retrieved using _input.read(value), which returns true if data
+   # was available, and false otherwise. _input.connected() returns if this
+   # input is connected to an output or not.
+   # input_port "input", "/std/string"
+
+   # An output port, i.e. an object to which the component pushes data so that
+   # it is transmitted to other components' inputs
+   #
+   # Data can be written using _output.write(value). _output.connected() returns
+   # if this output is connected to an input or not.
+   
+   output_port "utmwgs", "phins_ixsea/Utmwgs"
+   output_port "rbs", "base/samples/RigidBodyState"
+
+
+    
+   output_port "log_message", "oro_marum/LogMessage"
+       doc "TextMessage with different priority levels"
+
+   # If you want that component's updateHook() to be executed when the "input"
+   # port gets data, uncomment this
+   # port_driven "input"
+   periodic(1.0)
 end
 
 
 # Declares a deployment, i.e. an actual executable that contains various tasks.
-deployment "phins_ixsea_test" do
+#deployment "phins_ixsea_test" do
     # This is a test deployment that should not be installed
-    do_not_install
+    # do_not_install
 
     # Declares it as periodic, with a period of 100ms
-    task("phins_ixsea", "Task").
-        periodic(0.1)
-end
+    # task("phins_ixsea", "Task").
+      #  periodic(0.1)
+# end
 
