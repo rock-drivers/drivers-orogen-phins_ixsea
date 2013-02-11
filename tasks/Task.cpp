@@ -1,16 +1,20 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.cpp */
 
 #include "Task.hpp"
+#include <phins_ixsea/Driver.hpp>
+
 
 using namespace phins_ixsea;
 
 Task::Task(std::string const& name)
-    : TaskBase(name)
+    : TaskBase(name),
+      mDriver(0)
 {
 }
 
 Task::Task(std::string const& name, RTT::ExecutionEngine* engine)
-    : TaskBase(name, engine)
+    : TaskBase(name, engine),
+      mDriver(0)
 {
 }
 
@@ -24,13 +28,44 @@ Task::~Task()
 // hooks defined by Orocos::RTT. See Task.hpp for more detailed
 // documentation about them.
 
-// bool Task::configureHook()
-// {
-//     if (! TaskBase::configureHook())
-//         return false;
-//     return true;
-// }
-// bool Task::startHook()
+ bool Task::configureHook()
+ {
+     delete mDriver;
+     mDriver = new phins_ixsea::Driver();
+
+     if (!_io_port.get().empty()) {
+         mDriver->openURI(_io_port.get());
+     }
+
+     mDriver->setParser(_protocol.get());
+
+     setDriver(mDriver);
+
+
+     if (! TaskBase::configureHook())
+         return false;
+     return true;
+ }
+
+
+void Task::processIO()
+{
+    mDriver->read();
+    if (mDriver->hasUpdate(phins_ixsea::UPD_UTMPOS | phins_ixsea::UPD_HPR))  {
+        base::samples::RigidBodyState rbs;
+        if (mDriver->getData(rbs)) {
+            rbs.time = base::Time::now();
+            _pose_samples.write(rbs);
+            std::cout << "New sample: " << (rbs.getYaw() * 180 / M_PI) << " "
+                    << (rbs.getPitch() * 180 / M_PI) << " "
+                    << (rbs.getRoll() * 180 / M_PI) << std::endl;
+        }
+    }
+
+}
+
+
+ // bool Task::startHook()
 // {
 //     if (! TaskBase::startHook())
 //         return false;

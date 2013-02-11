@@ -3,7 +3,7 @@ name "phins_ixsea"
 # version "0.1"
 
 import_types_from "base"
-# import_types_from "PhinsTypes.hpp"
+import_types_from "phins_ixsea/PhinsTypes.hpp"
 
 using_library "phins_ixsea"
 using_task_library "iodrivers_base"
@@ -12,18 +12,30 @@ task_context "Task" do
     subclasses "iodrivers_base::Task"
     needs_configuration
 
-    output_port "pose_samples", "base::samples::RigidBodyState"
+    property('protocol', 'phins_ixsea/Protocol', 'PhinsStandard')
+    property("origin", "/base/Position").
+        doc "Origin in UTM coordinates, that is used for position readings." 
+
+    output_port('pose_samples', 'base::samples::RigidBodyState').
+        doc "The vehicle pose in the world frame in the UTM coordinate and local to the originrelative position"
+    output_port('geo_pos_samples', 'base::samples::RigidBodyState').
+        doc "The vehicle pose in the world frame in geopraphic coordinates"
+
         
+#    operation('setOrigin').
+#        doc('set the reference position for relative UTM coordinates, takes the last process po')
+        
+    fd_driven
 end
 
 
-# Declares a deployment, i.e. an actual executable that contains various tasks.
-deployment "phins_ixsea_test" do
-    # This is a test deployment that should not be installed
-    do_not_install
-
-    # Declares it as periodic, with a period of 100ms
-    task("phins_ixsea", "Task").
-        periodic(0.1)
-end
+## Declares a deployment, i.e. an actual executable that contains various tasks.
+#deployment "phins_ixsea_test" do
+#    # This is a test deployment that should not be installed
+#    do_not_install
+#
+#    # Declares it as periodic, with a period of 100ms
+#    task("phins_ixsea", "Task").
+#        periodic(0.1)
+#end
 

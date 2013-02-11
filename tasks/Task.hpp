@@ -7,6 +7,9 @@
 
 namespace phins_ixsea {
 
+    class Driver;
+
+
     /*! \class Task 
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.
      * Essential interfaces are operations, data flow ports and properties. These interfaces have been defined using the oroGen specification.
@@ -25,7 +28,9 @@ namespace phins_ixsea {
     {
 	friend class TaskBase;
     protected:
+	    Driver*     mDriver;
 
+        void processIO();
 
 
     public:
@@ -60,14 +65,14 @@ namespace phins_ixsea {
          end
          \endverbatim
          */
-        // bool configureHook();
+         bool configureHook();
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to Running. If it returns false, then the component will
          * stay in Stopped. Otherwise, it goes into Running and updateHook()
          * will be called.
          */
-        // bool startHook();
+//         bool startHook();
 
         /** This hook is called by Orocos when the component is in the Running
          * state, at each activity step. Here, the activity gives the "ticks"
