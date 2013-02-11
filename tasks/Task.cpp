@@ -2,6 +2,8 @@
 
 #include "Task.hpp"
 #include <phins_ixsea/Driver.hpp>
+#include <rtt/extras/FileDescriptorActivity.hpp>
+
 
 
 using namespace phins_ixsea;
@@ -81,10 +83,21 @@ void Task::setOrigin()
 //         return false;
 //     return true;
 // }
-// void Task::updateHook()
-// {
-//     TaskBase::updateHook();
-// }
+ void Task::updateHook()
+ {
+     TaskBase::updateHook();
+     if (mDriver->getFileDescriptor() != Driver::INVALID_FD)
+     {
+         RTT::extras::FileDescriptorActivity* fd_activity =
+             getActivity<RTT::extras::FileDescriptorActivity>();
+         if (fd_activity)
+         {
+             if (fd_activity->hasTimeout())
+                 return exception(IO_TIMEOUT);
+         }
+     }
+
+ }
 // void Task::errorHook()
 // {
 //     TaskBase::errorHook();
