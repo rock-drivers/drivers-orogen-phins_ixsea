@@ -16,14 +16,14 @@ task_context "Task" do
     property("origin", "/base/Position").
         doc "Origin in UTM coordinates, that is used for position readings." 
 
-    output_port('pose_samples', 'base::samples::RigidBodyState').
+    output_port('pose_samples', 'base/samples/RigidBodyState').
         doc "The vehicle pose in the world frame in the UTM coordinate and local to the originrelative position"
-    output_port('geo_pos_samples', 'base::samples::RigidBodyState').
+    output_port('geo_pos_samples', 'base/samples/RigidBodyState').
         doc "The vehicle pose in the world frame in geopraphic coordinates"
 
         
-#    operation('setOrigin').
-#        doc('set the reference position for relative UTM coordinates, takes the last process po')
+    operation('setOrigin').
+        doc('set the reference position for relative UTM coordinates, takes the last processed position')
         
     fd_driven
 end

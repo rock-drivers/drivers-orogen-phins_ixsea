@@ -16,6 +16,10 @@ Orocos.run 'phins_ixsea::Task' => 'phins' do
     phins.configure
     phins.start
     
+    sleep 2
+    
+    phins.setOrigin
+    
     
     STDIN.getc
     

@@ -30,8 +30,11 @@ namespace phins_ixsea {
     protected:
 	    Driver*     mDriver;
 
+	    base::Position mOrigin;
+
         void processIO();
 
+        void setOrigin();
 
     public:
         /** TaskContext constructor for Task

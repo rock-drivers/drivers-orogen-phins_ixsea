@@ -41,6 +41,7 @@ Task::~Task()
 
      setDriver(mDriver);
 
+     mOrigin = _origin.get();
 
      if (! TaskBase::configureHook())
          return false;
@@ -51,17 +52,23 @@ Task::~Task()
 void Task::processIO()
 {
     mDriver->read();
-    if (mDriver->hasUpdate(phins_ixsea::UPD_UTMPOS | phins_ixsea::UPD_HPR))  {
-        base::samples::RigidBodyState rbs;
-        if (mDriver->getData(rbs)) {
-            rbs.time = base::Time::now();
-            _pose_samples.write(rbs);
-            std::cout << "New sample: " << (rbs.getYaw() * 180 / M_PI) << " "
-                    << (rbs.getPitch() * 180 / M_PI) << " "
-                    << (rbs.getRoll() * 180 / M_PI) << std::endl;
-        }
+    if (mDriver->hasUpdate(phins_ixsea::UPD_UTMPOS | phins_ixsea::UPD_HPR, true))  {
+        base::samples::RigidBodyState rbs = mDriver->relativePose(mOrigin);
+        _pose_samples.write(rbs);
+        std::cout << "New sample: " << (rbs.getYaw() * 180 / M_PI) << " "
+                << (rbs.getPitch() * 180 / M_PI) << " "
+                << (rbs.getRoll() * 180 / M_PI) << std::endl;
     }
+    if (mDriver->hasUpdate(phins_ixsea::UPD_POSITION)) {
+        _geo_pos_samples.write(mDriver->geoPose());
+    }
+}
 
+
+void Task::setOrigin()
+{
+    mOrigin = mDriver->utmPose().position;
+    _origin.set(mOrigin);
 }
 
 
