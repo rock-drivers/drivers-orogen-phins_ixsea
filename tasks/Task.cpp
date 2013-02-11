@@ -62,6 +62,9 @@ void Task::processIO()
     if (mDriver->hasUpdate(phins_ixsea::UPD_POSITION)) {
         _geo_pos_samples.write(mDriver->geoPose());
     }
+    if (mDriver->hasUpdate(UPD_STATUS)) {
+        _phins_status.write(mDriver->phinsStatus());
+    }
 }
 
 

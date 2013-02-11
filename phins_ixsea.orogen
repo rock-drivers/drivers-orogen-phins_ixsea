@@ -20,7 +20,8 @@ task_context "Task" do
         doc "The vehicle pose in the world frame in the UTM coordinate and local to the originrelative position"
     output_port('geo_pos_samples', 'base/samples/RigidBodyState').
         doc "The vehicle pose in the world frame in geopraphic coordinates"
-
+    output_port('phins_status', 'phins_ixsea/PhinsStatus').
+        doc "The phins status word for device status and algorhythm status"
         
     operation('setOrigin').
         doc('set the reference position for relative UTM coordinates, takes the last processed position')
