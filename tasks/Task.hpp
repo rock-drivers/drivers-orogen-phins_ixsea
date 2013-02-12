@@ -36,6 +36,9 @@ namespace phins_ixsea {
 
         void setOrigin();
 
+        void processStatus(const PhinsStatus& status);
+
+
     public:
         /** TaskContext constructor for Task
          * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.

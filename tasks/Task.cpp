@@ -66,9 +66,31 @@ void Task::processIO()
     }
     if (mDriver->hasUpdate(UPD_STATUS)) {
         _phins_status.write(mDriver->phinsStatus());
+        processStatus(mDriver->phinsStatus());
     }
 }
 
+
+void Task::processStatus(const PhinsStatus& status)
+{
+    switch(mDriver->navigationMode()) {
+    case COARSE_ALIGN:
+        if (state() != COARSE_ALIGN)
+            state(COARSE_ALIGN);
+        break;
+    case FINE_ALIGN_MODE:
+        if (state() != FINE_ALIGN)
+            state(FINE_ALIGN);
+        break;
+    case NAVIGATION_MODE:
+        if (state() != NAVIGATION)
+            state(NAVIGATION);
+        break;
+    case ERROR_MODE:
+        if (state() != DEVICE_ERROR)
+            state(DEVICE_ERROR);
+    }
+}
 
 void Task::setOrigin()
 {
