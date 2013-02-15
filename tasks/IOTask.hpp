@@ -1,16 +1,16 @@
 /* Generated from orogen/lib/orogen/templates/tasks/Task.hpp */
 
-#ifndef PHINS_IXSEA_TASK_TASK_HPP
-#define PHINS_IXSEA_TASK_TASK_HPP
+#ifndef PHINS_IXSEA_IOTASK_TASK_HPP
+#define PHINS_IXSEA_IOTASK_TASK_HPP
 
-#include "phins_ixsea/TaskBase.hpp"
+#include "phins_ixsea/IOTaskBase.hpp"
 
 namespace phins_ixsea {
 
-    class Driver;
+    class IODriver;
 
 
-    /*! \class Task 
+    /*! \class IOTask 
      * \brief The task context provides and requires services. It uses an ExecutionEngine to perform its functions.
      * Essential interfaces are operations, data flow ports and properties. These interfaces have been defined using the oroGen specification.
      * In order to modify the interfaces you should (re)use oroGen and rely on the associated workflow.
@@ -19,43 +19,36 @@ namespace phins_ixsea {
      * The name of a TaskContext is primarily defined via:
      \verbatim
      deployment 'deployment_name'
-         task('custom_task_name','phins_ixsea::Task')
+         task('custom_task_name','phins_ixsea::IOTask')
      end
      \endverbatim
      *  It can be dynamically adapted when the deployment is called with a prefix argument. 
      */
-    class Task : public TaskBase
+    class IOTask : public IOTaskBase
     {
-	friend class TaskBase;
+	friend class IOTaskBase;
     protected:
-	    Driver*     mDriver;
+	    IODriver*   mDriver;
 
-	    base::Position mOrigin;
-
-        void processIO();
-
-        void setOrigin();
-
-        void processStatus(const PhinsExtStatus& status);
-
+        virtual void processIO();
 
     public:
-        /** TaskContext constructor for Task
+        /** TaskContext constructor for IOTask
          * \param name Name of the task. This name needs to be unique to make it identifiable via nameservices.
          * \param initial_state The initial TaskState of the TaskContext. Default is Stopped state.
          */
-        Task(std::string const& name = "phins_ixsea::Task");
+        IOTask(std::string const& name = "phins_ixsea::IOTask");
 
-        /** TaskContext constructor for Task 
+        /** TaskContext constructor for IOTask 
          * \param name Name of the task. This name needs to be unique to make it identifiable for nameservices. 
          * \param engine The RTT Execution engine to be used for this task, which serialises the execution of all commands, programs, state machines and incoming events for a task. 
          * 
          */
-        Task(std::string const& name, RTT::ExecutionEngine* engine);
+        IOTask(std::string const& name, RTT::ExecutionEngine* engine);
 
-        /** Default deconstructor of Task
+        /** Default deconstructor of IOTask
          */
-	~Task();
+	~IOTask();
 
         /** This hook is called by Orocos when the state machine transitions
          * from PreOperational to Stopped. If it returns false, then the
@@ -71,14 +64,14 @@ namespace phins_ixsea {
          end
          \endverbatim
          */
-         bool configureHook();
+        bool configureHook();
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to Running. If it returns false, then the component will
          * stay in Stopped. Otherwise, it goes into Running and updateHook()
          * will be called.
          */
-//         bool startHook();
+        bool startHook();
 
         /** This hook is called by Orocos when the component is in the Running
          * state, at each activity step. Here, the activity gives the "ticks"
@@ -94,7 +87,7 @@ namespace phins_ixsea {
          * component is stopped and recover() needs to be called before starting
          * it again. Finally, FatalError cannot be recovered.
          */
-         void updateHook();
+        void updateHook();
 
         /** This hook is called by Orocos when the component is in the
          * RunTimeError state, at each activity step. See the discussion in
@@ -102,18 +95,18 @@ namespace phins_ixsea {
          *
          * Call recover() to go back in the Runtime state.
          */
-        // void errorHook();
+        void errorHook();
 
         /** This hook is called by Orocos when the state machine transitions
          * from Running to Stopped after stop() has been called.
          */
-        // void stopHook();
+        void stopHook();
 
         /** This hook is called by Orocos when the state machine transitions
          * from Stopped to PreOperational, requiring the call to configureHook()
          * before calling start() again.
          */
-        // void cleanupHook();
+        void cleanupHook();
     };
 }
 

@@ -14,6 +14,7 @@ Orocos.run 'phins_ixsea::Task' => 'phins' do
     phins.io_port = 'udpserver://8113'
     
     Orocos.apply_conf_file(phins, 'phins_ixsea::Task.yml')
+    phins.extended_status = true;
     phins.configure
     phins.start
     
