@@ -131,6 +131,11 @@ void Task::setOrigin()
          }
      }
 
+     base::Time time = base::Time::now();
+     if ((time - mLastStatus) > _io_status_interval.get()) {
+         _io_status.write(mDriver->getStatus());
+         mLastStatus = time;
+     }
  }
 // void Task::errorHook()
 // {

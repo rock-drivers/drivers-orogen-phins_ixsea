@@ -23,15 +23,6 @@ IOTask::~IOTask()
     delete mDriver;
 }
 
-
-
-/// The following lines are template definitions for the various state machine
-// hooks defined by Orocos::RTT. See IOTask.hpp for more detailed
-// documentation about them.
-
-
-
-
 bool IOTask::configureHook()
 {
     delete mDriver;
@@ -49,15 +40,12 @@ bool IOTask::configureHook()
 }
 
 
-
 bool IOTask::startHook()
 {
     if (! iodrivers_base::Task::startHook())
         return false;
     return true;
 }
-
-
 
 void IOTask::updateHook()
 {
@@ -67,6 +55,12 @@ void IOTask::updateHook()
     }
     
     iodrivers_base::Task::updateHook();
+
+    base::Time time = base::Time::now();
+    if ((time - mLastStatus) > _io_status_interval.get()) {
+        _io_status.write(mDriver->getStatus());
+        mLastStatus = time;
+    }
 }
 
 

@@ -40,6 +40,7 @@ end
 task_context "IOTask" do
     subclasses "iodrivers_base::Task"
     needs_configuration
+    doc "generic IOTask fro sending and reading data on additional ports"
     
     input_port("io_master2slave", "iodrivers_base/RawPacket").
         doc 'data to be written to the slave device/phins'
@@ -50,3 +51,18 @@ task_context "IOTask" do
     fd_driven
 end
 
+
+deployment 'phins_ixsea_test' do
+    do_not_install
+    
+        # Declares it as periodic, with a period of 100ms
+    task("phins", "Task") 
+    
+        # Declares a sim task
+    task("gpsin", "IOTask") 
+    task("gpsout", "IOTask") 
+        
+                    
+    add_default_logger
+
+end

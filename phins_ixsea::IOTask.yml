@@ -1,0 +1,12 @@
+--- name:default
+# no documentation available for this property
+io_port: 'udp://phins:8117'
+# the timeout on read. Defaults to one second
+io_read_timeout:
+  microseconds: 0
+# the interval at which the status port should be written. Defaults to one second
+io_status_interval:
+  microseconds: 10000000
+# the timeout on write. Defaults to one second. Used only in direct I/O mode
+io_write_timeout:
+  microseconds: 1000000
