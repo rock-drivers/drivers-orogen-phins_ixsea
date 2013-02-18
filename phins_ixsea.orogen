@@ -3,7 +3,7 @@ name "phins_ixsea"
 # version "0.1"
 
 import_types_from "base"
-# import_types_from "PhinsTypes.hpp"
+import_types_from "phins_ixsea/PhinsTypes.hpp"
 
 using_library "phins_ixsea"
 using_task_library "iodrivers_base"
@@ -11,19 +11,58 @@ using_task_library "iodrivers_base"
 task_context "Task" do
     subclasses "iodrivers_base::Task"
     needs_configuration
+    
+    runtime_states    :COARSE_ALIGN, :FINE_ALIGN, :NAVIGATION
+    error_states      :DEVICE_ERROR
 
-    output_port "pose_samples", "base::samples::RigidBodyState"
+    property('protocol', 'phins_ixsea/Protocol', 'PhinsStandard').
+        doc "The protocol used by the Phins for data output"
+    property("origin", "/base/Position").
+        doc "Origin in UTM coordinates, that is used for position readings."
+    property("extended_status", "bool", false).
+        doc "Send extended Phins Status when true"
+
+    output_port('pose_samples', 'base/samples/RigidBodyState').
+        doc "The vehicle pose in the world frame in the UTM coordinate and local to the originrelative position"
+    output_port('geo_pos_samples', 'base/samples/RigidBodyState').
+        doc "The vehicle pose in the world frame in geopraphic coordinates"
+    output_port('phins_status', 'phins_ixsea/PhinsStatus').
+        doc "The phins status word for device status and algorhythm status"
+    output_port('phins_extended_status', 'phins_ixsea/PhinsExtStatus').
+        doc "The phins status words for device status and algorhythm status and user status"
         
+    operation('setOrigin').
+        doc('set the reference position for relative UTM coordinates, takes the last processed position')
+        
+    fd_driven
+end
+
+task_context "IOTask" do
+    subclasses "iodrivers_base::Task"
+    needs_configuration
+    doc "generic IOTask fro sending and reading data on additional ports"
+    
+    input_port("io_master2slave", "iodrivers_base/RawPacket").
+        doc 'data to be written to the slave device/phins'
+    output_port("io_slave2master", "iodrivers_base/RawPacket").
+        doc 'data to be read from the slave device/phins'
+        
+    port_driven "io_master2slave"
+    fd_driven
 end
 
 
-# Declares a deployment, i.e. an actual executable that contains various tasks.
-deployment "phins_ixsea_test" do
-    # This is a test deployment that should not be installed
+deployment 'phins_ixsea_test' do
     do_not_install
+    
+        # Declares it as periodic, with a period of 100ms
+    task("phins", "Task") 
+    
+        # Declares a sim task
+    task("gpsin", "IOTask") 
+    task("gpsout", "IOTask") 
+        
+                    
+    add_default_logger
 
-    # Declares it as periodic, with a period of 100ms
-    task("phins_ixsea", "Task").
-        periodic(0.1)
 end
-

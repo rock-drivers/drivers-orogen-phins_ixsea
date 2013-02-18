@@ -1,0 +1,20 @@
+--- name:default
+# no documentation available for this property
+io_port: 'udpserver://8113'
+# the timeout on read. Defaults to one second
+io_read_timeout:
+  microseconds: 3000000
+# the interval at which the status port should be written. Defaults to one second
+io_status_interval:
+  microseconds: 5000000
+# the timeout on write. Defaults to one second. Used only in direct I/O mode
+io_write_timeout:
+  microseconds: 1000000
+# Origin in UTM coordinates, that is used for position readings.
+origin:
+  data:
+  - 489991.378
+  - 5884603.174
+  - 0
+# no documentation available for this property
+protocol: :PhinsStandard
