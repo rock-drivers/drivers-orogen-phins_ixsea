@@ -13,7 +13,7 @@ task_context "Task" do
     needs_configuration
     
     runtime_states    :COARSE_ALIGN, :FINE_ALIGN, :NAVIGATION
-    error_states      :DEVICE_ERROR
+    exception_states  :DEVICE_ERROR
 
     property('protocol', 'phins_ixsea/Protocol', 'PhinsStandard').
         doc "The protocol used by the Phins for data output"
