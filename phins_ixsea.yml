@@ -1,5 +1,0 @@
---- name:default
-# Configuration for the phins
-config: 
-  port: 8113
-  protocol: 0
