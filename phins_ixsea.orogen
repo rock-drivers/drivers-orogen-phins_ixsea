@@ -40,7 +40,7 @@ end
 task_context "IOTask" do
     subclasses "iodrivers_base::Task"
     needs_configuration
-    doc "generic IOTask fro sending and reading data on additional ports"
+    doc "generic IOTask for sending and reading data on additional ports"
     
     input_port("io_master2slave", "iodrivers_base/RawPacket").
         doc 'data to be written to the slave device/phins'

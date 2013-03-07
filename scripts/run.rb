@@ -6,7 +6,7 @@ Orocos.initialize
 
 Orocos.run 'phins_ixsea::Task' => 'phins' do
     Orocos.logger.level = Logger::DEBUG
-    Orocos.log_all
+#    Orocos.log_all
     puts "deployed phins_ixsea::Task"
 
     phins = Orocos::TaskContext.get 'phins'
