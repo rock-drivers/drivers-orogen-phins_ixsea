@@ -50,7 +50,7 @@ bool IOTask::startHook()
 void IOTask::updateHook()
 {
     iodrivers_base::RawPacket   packet;
-    if (_io_master2slave.read(packet) == RTT::NewData) {
+    while (_io_master2slave.read(packet) == RTT::NewData) {
         mDriver->writePacket(packet.data.data(), packet.data.size());
     }
     
