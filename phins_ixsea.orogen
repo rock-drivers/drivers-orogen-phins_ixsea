@@ -31,7 +31,7 @@ task_context "Task" do
     output_port('phins_extended_status', 'phins_ixsea/PhinsExtStatus').
         doc "The phins status words for device status and algorhythm status and user status"
         
-    operation('setOrigin').
+    operation('initializeOrigin').
         doc('set the reference position for relative UTM coordinates, takes the last processed position')
         
     fd_driven

@@ -109,7 +109,7 @@ void Task::processStatus(const PhinsExtStatus& status)
     }
 }
 
-void Task::setOrigin()
+void Task::initializeOrigin()
 {
     mOrigin = mDriver->utmPose().position;
     _origin.set(mOrigin);

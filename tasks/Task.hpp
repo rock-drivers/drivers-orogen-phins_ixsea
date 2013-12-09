@@ -34,7 +34,7 @@ namespace phins_ixsea {
 
         void processIO();
 
-        void setOrigin();
+        void initializeOrigin();
 
         void processStatus(const PhinsExtStatus& status);
 
