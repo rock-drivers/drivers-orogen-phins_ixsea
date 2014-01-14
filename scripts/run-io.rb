@@ -4,8 +4,8 @@ Orocos.initialize
 
 #Orocos.load_typekit 'phins_ixsea'
 
-#Orocos.run 'phins_ixsea::Task' => 'phins', 'phins_ixsea::IOTask' => 'gpsin', 'phins_ixsea::IOTask' => 'gpsout'  do
-Orocos.run 'phins_ixsea_test' do
+Orocos.run 'phins_ixsea::Task' => 'phins', 'phins_ixsea::IOTask' => ['gpsin', 'gpsout']  do
+#Orocos.run 'phins_ixsea_test' do
     Orocos.logger.level = Logger::DEBUG
     Orocos.log_all
     puts "deployed phins_ixsea::Task"
