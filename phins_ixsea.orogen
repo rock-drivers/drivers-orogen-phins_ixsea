@@ -3,9 +3,9 @@ name "phins_ixsea"
 # version "0.1"
 
 import_types_from "base"
+using_library "phins_ixsea"
 import_types_from "phins_ixsea/PhinsTypes.hpp"
 
-using_library "phins_ixsea"
 using_task_library "iodrivers_base"
 
 task_context "Task" do
